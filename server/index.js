@@ -18,7 +18,7 @@ connectDB()
 
 //middleware
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "https://march-cohort-hl3w.vercel.app"
 }))
 app.use(express.json())
 
