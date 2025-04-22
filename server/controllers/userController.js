@@ -26,11 +26,14 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
+        const { role } = req.query
+        console.log(role, "role");
+
         const { email, password } = req.body
         if (!email || !password) {
             return res.status(400).json({ error: "All fields are required" })
         }
-        const userExist = await userModel.findOne({ email })
+        const userExist = await userModel.findOne({ email, role })
         if (!userExist) {
             return res.status(400).json({ error: "User not found" })
         }

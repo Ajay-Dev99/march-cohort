@@ -4,6 +4,7 @@ const userRouter = require("./routes/userRoutes")
 const courseRouter = require("./routes/courseRoutes")
 const cors = require('cors')
 const cartRouter = require("./routes/cartRoutes")
+const paymentRouter = require("./routes/paymentRoute")
 require('dotenv').config()
 
 const app = express()
@@ -25,6 +26,7 @@ app.use(express.json())
 app.use("/user", userRouter)
 app.use("/course", courseRouter)
 app.use("/cart", cartRouter)
+app.use("/payment", paymentRouter)
 
 app.listen(process.env.PORT, () => {
     console.log(`Server starts on port ${process.env.PORT}`);

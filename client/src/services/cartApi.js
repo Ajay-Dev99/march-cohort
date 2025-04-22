@@ -7,3 +7,7 @@ export const getCart = () => {
     return userInstance.get(`/cart/getcart`)
 }
 
+export const makePayment = (data) => {
+    return userInstance.post("/payment/stripe-checkout", data)
+}
+

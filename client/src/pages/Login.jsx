@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { userLogin } from '../services/userApi';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login({ role = "user" }) {
 
     const navigate = useNavigate()
     const [values, setValues] = useState({
@@ -11,14 +11,29 @@ function Login() {
         password: ""
     })
 
+    const [searchQuery, setSearchQuery] = useState("")
+
+
+    useEffect(() => {
+        //api calling
+    }, [searchQuery])
+
     const handleSubmit = (e) => {
 
         e.preventDefault()
-        userLogin(values).then((res) => {
+        userLogin(values, role).then((res) => {
 
-            localStorage.setItem("token", res?.data?.token)
-            toast.success(res?.data?.message)
-            navigate("/")
+            if (role == "admin") {
+                localStorage.setItem("admin-token", res?.data?.token)
+                toast.success(res?.data?.message)
+                navigate("/admin/dashboard")
+            } else {
+                localStorage.setItem("token", res?.data?.token)
+                toast.success(res?.data?.message)
+                navigate("/")
+            }
+
+
 
         }).catch((err) => {
             toast.error(err?.response?.data?.error);
@@ -35,7 +50,7 @@ function Login() {
         <div className="hero bg-base-200 min-h-screen">
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className="text-center lg:text-left">
-                    <h1 className="text-5xl font-bold">Login now!</h1>
+                    < h1 className="text-5xl font-bold">{role == "admin" ? "Admin Login" : "Login now!"}</h1>
                     <p className="py-6">
                         Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
                         quasi. In deleniti eaque aut repudiandae et a id nisi.
@@ -64,7 +79,7 @@ function Login() {
                     </form>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

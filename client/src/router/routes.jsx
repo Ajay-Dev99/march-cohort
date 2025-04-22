@@ -4,6 +4,8 @@ import HomePage from "../pages/HomePage";
 import Cartpage from "../pages/Cartpage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import PaymentSuccess from "../pages/PaymentSuccess";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
 
 
 export const router = createBrowserRouter([
@@ -16,22 +18,10 @@ export const router = createBrowserRouter([
                 path: "",
                 element: <HomePage />,
             },
-            // {
-            //     path: "about",
-            //     element: <AboutPage />,
-            // },
-            // {
-            //     path: "courses",
-            //     element: <Courses />,
-            // },
             {
                 path: "cart",
                 element: <Cartpage />,
             },
-            // {
-            //     path: "payment/success",
-            //     element: <Ordersuccess />
-            // },
             {
                 path: "login",
                 element: <Login />,
@@ -40,7 +30,22 @@ export const router = createBrowserRouter([
                 path: "signup",
                 element: <Register />,
             },
+
+            {
+                path: 'payment/success',
+                element: <PaymentSuccess />
+            }
         ]
     },
-
+    {
+        path: "/admin",
+        element: <UserLayout />,
+        children: [{
+            path: "login",
+            element: <Login role="admin" />
+        }, {
+            path: "dashboard",
+            element: <AdminDashboard />
+        }]
+    }
 ]);

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getCart } from '../services/cartApi'
+import { getCart, makePayment } from '../services/cartApi'
+import { loadStripe } from '@stripe/stripe-js';
+
+
+const stripePromise = loadStripe(import.meta.env.VITE_PUBLISHED_KEY_STRIPE);
 
 function Cartpage() {
 
@@ -15,6 +19,33 @@ function Cartpage() {
 
         })
     }, [])
+
+
+    const makePaymentFunction = async () => {
+        const body = {
+            products: cartItems
+        }
+
+        const response = await makePayment(body)
+        console.log(response.data.sessionId, "stripe");
+
+        const session = response.data.sessionId
+
+        const stripe = await stripePromise
+
+        if (stripe) {
+            const result = await stripe.redirectToCheckout({
+                sessionId: session
+            })
+
+            if (result.error) {
+                console.log(result.error.message);
+
+            }
+        } else {
+            console.log('Stripe failed to load');
+        }
+    }
 
     return (
         <div className="space-y-3">
@@ -35,6 +66,8 @@ function Cartpage() {
                     </div>
                 ))
             }
+
+            <button className='btn btn-success' onClick={makePaymentFunction} >Checkout</button>
         </div>
     )
 }
